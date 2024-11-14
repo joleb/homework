@@ -1,33 +1,15 @@
-import { gql,  } from "./_generated";
+import { gql } from "./_generated";
 
 export const GET_CONTENT_NODES = gql(`
-  query Admin {
+  query Admin($before: String, $after: String, $first: Int, $last: Int) {
     Admin {
       Tree {
-        GetContentNodes {
+        GetContentNodes(before: $before, after: $after, first: $first, last: $last) {
           edges {
             cursor
             node {
               id
-              attachments {
-                id
-                title
-                description
-                kind
-              }
-              structureDefinition {
-                title
-                coordinates {
-                  parentRef
-                }
-                definitionType
-              }
-              typeDefinition {
-                definitionType
-              }
               description
-              shortDescription
-              imageId
               image {
                 name
                 fileType
@@ -41,22 +23,21 @@ export const GET_CONTENT_NODES = gql(`
                 thumbnail
                 url
               }
-              versioning {
-                draftVersion
-                releaseVersion
+              shortDescription
+              structureDefinition { 
+                title
               }
-              instructors {
-                id
-                superId
-                name
-              }
-              parentId
-              hasBeenPublishedOnce
-              rootId
             }
+          }
+          pageInfo {
+            endCursor
+            startCursor
+            hasNextPage
+            hasPreviousPage
           }
         }
       }
     }
   }
+  
 `);

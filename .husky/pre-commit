@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+set -e
+echo "🦦 Running lint-staged"
+yarn lint-staged
+echo "🎉 lint-staged done"
+

@@ -1,41 +1,86 @@
-import React from 'react';
-import { View, Text, FlatList, Button, StyleSheet } from 'react-native';
-import { useQuery } from '@apollo/client';
-import gql from 'graphql-tag';
-import { useRouter } from 'expo-router'; 
-import { GET_CONTENT_NODES } from '../gql/queries';
-import useGetDocumentNodes from '../hooks/useGetDocumentNodes';
+import React, { useCallback, useMemo } from "react";
+import { Text, FlatList, ListRenderItemInfo } from "react-native";
+
+import { useRouter } from "expo-router";
+
+import useGetDocumentNodes from "../hooks/useGetDocumentNodes";
+import { AdminQuery } from "../gql/_generated/graphql";
+import ThemedSeparator from "../components/ThemedSeparator";
+import { isTruthy } from "../utils/general";
+import EdgeItem from "../components/EdgeItem";
+import { ContentNodeEdge } from "../types";
+
+const updateQuery = (
+  previousResult: AdminQuery,
+  { fetchMoreResult }: { fetchMoreResult: AdminQuery },
+) => {
+  if (!fetchMoreResult) return previousResult;
+  return {
+    Admin: {
+      ...previousResult.Admin,
+      Tree: {
+        ...previousResult.Admin.Tree,
+        GetContentNodes: {
+          ...previousResult.Admin.Tree.GetContentNodes,
+          edges: [
+            ...(previousResult.Admin.Tree.GetContentNodes.edges || []),
+            ...(fetchMoreResult.Admin.Tree.GetContentNodes.edges || []),
+          ],
+          pageInfo: fetchMoreResult.Admin.Tree.GetContentNodes.pageInfo,
+        },
+      },
+    },
+  };
+};
 
 const Dashboard: React.FC = () => {
-  const { data, loading, error } = useGetDocumentNodes();
+  const { data, loading, error, fetchMore } = useGetDocumentNodes({
+    first: 10,
+  });
   const router = useRouter();
 
   const handleLogout = () => {
     // Clear token and navigate to login
-    router.push('/');
+    router.push("/");
   };
+  const handleLoadMore = useCallback(() => {
+    if (data?.Admin?.Tree?.GetContentNodes?.pageInfo?.hasNextPage) {
+      const endCursor = data.Admin.Tree.GetContentNodes.pageInfo.endCursor;
+      fetchMore({
+        variables: { after: endCursor, first: 10 },
+        updateQuery,
+      });
+    }
+  }, [data, fetchMore]);
+
+  const filteredData = useMemo(
+    () =>
+      // Filter out nodes without a title
+      data?.Admin?.Tree?.GetContentNodes?.edges
+        ?.filter(isTruthy)
+        .filter((edge) => !!edge?.node?.structureDefinition.title.trim()),
+    [data],
+  );
+
+  const renderItem = useCallback(
+    ({ item }: ListRenderItemInfo<ContentNodeEdge>) => <EdgeItem item={item} />,
+    [],
+  );
 
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error loading content nodes.</Text>;
 
   return (
-    <View style={styles.container}>
-      <Text>Welcome!</Text>
-      <FlatList
-        data={data?.Admin?.Tree?.GetContentNodes?.edges}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <Text style={styles.node}>{JSON.stringify(item)}</Text>
-        )}
-      />
-      <Button title="Logout" onPress={handleLogout} />
-    </View>
+    <FlatList
+      data={filteredData}
+      renderItem={renderItem}
+      onEndReached={handleLoadMore}
+      onEndReachedThreshold={0.75}
+      refreshing={loading}
+      ListFooterComponent={loading ? <Text>Loading more...</Text> : null}
+      ItemSeparatorComponent={ThemedSeparator}
+    />
   );
 };
-
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16 },
-  node: { padding: 10, borderBottomWidth: 1 },
-});
 
 export default Dashboard;
