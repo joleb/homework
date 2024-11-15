@@ -1,4 +1,3 @@
- 
 import { gql } from "./_generated";
 
 export const LOGIN_MUTATION = gql(`
@@ -8,9 +7,7 @@ mutation LoginJwt($input: LoginJwtInput!) {
       loginResult {
         jwtTokens {
           accessToken
-          refreshToken
         }
-        firstLogin
       }
     }
   }

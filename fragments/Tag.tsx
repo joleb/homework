@@ -1,7 +1,7 @@
 import { ViewProps, StyleSheet } from "react-native";
 import { useMemo } from "react";
 
-import { ThemedText } from "@/components/ThemedText";
+import { ThemedText } from "@/fragments/ThemedText";
 import {
   CreateStylesColors,
   useThemeAwareStyles,

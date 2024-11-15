@@ -5,7 +5,7 @@ import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Image } from "expo-image";
 
-import { ThemedText } from "../../ThemedText";
+import { ThemedText } from "../../../fragments/ThemedText";
 import { ContentNodeEdge } from "../../../types";
 import { stripHtml } from "../../../utils/general";
 import Spacing from "../../../constants/Spacing";

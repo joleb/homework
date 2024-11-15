@@ -1,22 +1,31 @@
-import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
+import {
+  ApolloClient,
+  InMemoryCache,
+  createHttpLink,
+  ApolloLink,
+} from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import * as SecureStore from "expo-secure-store";
-import { loadDevMessages, loadErrorMessages } from "@apollo/client/dev";
 
 import { API_URL } from "../constants/api";
 
-if (__DEV__) {
-  // add dev messages to the Apollo Client
-  loadDevMessages();
-  loadErrorMessages();
-}
+import { isTokenExpired, refreshAccessToken } from "./auth";
 
 const httpLink = createHttpLink({
   uri: API_URL,
 });
 
 const authLink = setContext(async (_, { headers }) => {
-  const token = await SecureStore.getItemAsync("accessToken");
+  let token = await SecureStore.getItemAsync("accessToken");
+
+  if (token && isTokenExpired(token)) {
+    const client = new ApolloClient({
+      link: httpLink,
+      cache: new InMemoryCache(),
+    });
+    token = await refreshAccessToken(client);
+  }
+
   return {
     headers: {
       ...headers,
@@ -26,7 +35,7 @@ const authLink = setContext(async (_, { headers }) => {
 });
 
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+  link: ApolloLink.from([authLink, httpLink]),
   cache: new InMemoryCache(),
 });
 

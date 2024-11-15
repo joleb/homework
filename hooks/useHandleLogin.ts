@@ -1,12 +1,13 @@
+import { useRef } from "react";
+
 import { useMutation } from "@apollo/client";
 import * as SecureStore from "expo-secure-store";
-import { useRouter } from "expo-router";
 
 import { LOGIN_MUTATION } from "@/gql/mutations";
 
 export const useHandleLogin = () => {
   const [login, { loading, error }] = useMutation(LOGIN_MUTATION);
-  const router = useRouter();
+  const hasError = useRef(false);
 
   const handleLogin = async ({
     email,
@@ -17,7 +18,7 @@ export const useHandleLogin = () => {
   }) => {
     if (!email || !password) {
       console.error("Email and password are required");
-      return;
+      return false;
     }
     try {
       const { data } = await login({
@@ -30,16 +31,24 @@ export const useHandleLogin = () => {
         throw new Error("Login failed");
       }
 
-      const { accessToken, refreshToken } =
-        data.Auth.loginJwt.loginResult.jwtTokens;
-      console.log("accessToken", accessToken);
+      const {
+        loginResult: {
+          jwtTokens: { accessToken },
+        },
+      } = data.Auth.loginJwt;
+
+      // Save credentials and token
+      await SecureStore.setItemAsync("email", email);
+      await SecureStore.setItemAsync("password", password);
       await SecureStore.setItemAsync("accessToken", accessToken);
-      await SecureStore.setItemAsync("refreshToken", refreshToken);
-      router.navigate("/dashboard");
+
+      return true;
     } catch (err) {
+      hasError.current = true;
       console.error("Login error:", err);
+      return false;
     }
   };
 
-  return { loading, error, handleLogin };
+  return { loading, error, handleLogin, hasError: hasError.current || !!error };
 };

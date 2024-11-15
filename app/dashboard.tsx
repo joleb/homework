@@ -5,7 +5,7 @@ import { useRouter } from "expo-router";
 
 import useGetDocumentNodes from "../hooks/useGetDocumentNodes";
 import { AdminQuery } from "../gql/_generated/graphql";
-import ThemedSeparator from "../components/ThemedSeparator";
+import ThemedSeparator from "../fragments/ThemedSeparator";
 import { isTruthy } from "../utils/general";
 import EdgeItem from "../components/EdgeItem";
 import { ContentNodeEdge } from "../types";

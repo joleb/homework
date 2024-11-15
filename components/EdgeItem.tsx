@@ -6,10 +6,10 @@ import { BottomSheetModal } from "@gorhom/bottom-sheet";
 
 import { ContentNodeEdge } from "../types";
 import Spacer from "../fragments/Spacer";
+import { ThemedText } from "../fragments/ThemedText";
 
 import DetailsBottomSheetContent from "./BottomSheets/Contents/Details";
 import BottomSheetWithChildren from "./BottomSheets/WithChildren";
-import { ThemedText } from "./ThemedText";
 
 import Tag from "@/fragments/Tag";
 import { stripHtml } from "@/utils/general";

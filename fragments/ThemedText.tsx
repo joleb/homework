@@ -14,16 +14,26 @@ export type ThemedTextProps = TextProps & {
     | "link"
     | "caption"
     | "small";
+  variant?: "default" | "warning";
 };
+
+const colorMapping = {
+  default: "text",
+  warning: "textError",
+} as const;
 
 export const ThemedText = ({
   style,
   lightColor,
   darkColor,
+  variant = "default",
   type = "default",
   ...rest
 }: ThemedTextProps) => {
-  const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
+  const color = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    colorMapping[variant],
+  );
 
   const mergedStyle = useMemo(
     // custom styles should always be applied after theme styles
