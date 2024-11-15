@@ -1,4 +1,5 @@
 import { Text, type TextProps, StyleSheet } from "react-native";
+import { useMemo } from "react";
 
 import { useThemeColor } from "@/hooks/useThemeColor";
 
@@ -23,7 +24,13 @@ export const ThemedText = ({
   ...rest
 }: ThemedTextProps) => {
   const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
-  return <Text style={[{ color }, styles[type], style]} {...rest} />;
+
+  const mergedStyle = useMemo(
+    // custom styles should always be applied after theme styles
+    () => StyleSheet.flatten([{ color }, styles[type], style]),
+    [style, color, type],
+  );
+  return <Text style={mergedStyle} {...rest} />;
 };
 
 const styles = StyleSheet.create({

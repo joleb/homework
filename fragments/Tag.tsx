@@ -1,4 +1,5 @@
 import { ViewProps, StyleSheet } from "react-native";
+import { useMemo } from "react";
 
 import { ThemedText } from "@/components/ThemedText";
 import {
@@ -15,10 +16,14 @@ interface TagProps extends ViewProps {
 
 const Tag: React.FC<TagProps> = ({ label, variant = "default", style }) => {
   const styles = useThemeAwareStyles(createStyles);
+  const flattenedStyles = useMemo(
+    () => StyleSheet.flatten([styles.container, styles[variant], style]),
+    [styles, variant, style],
+  );
   return (
     <ThemedText
       type="caption"
-      style={[styles.container, styles[variant], style]}
+      style={flattenedStyles}
       lightColor={Colors.light.text}
       darkColor={Colors.dark.text}
     >

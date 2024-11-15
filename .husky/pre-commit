@@ -1,6 +1,12 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 set -e
+echo "🦦 Running tsc"
+yarn tsc
+echo "🎉 tsc done"
+echo ""
+echo "---"
+echo ""
 echo "🦦 Running lint-staged"
 yarn lint-staged
 echo "🎉 lint-staged done"

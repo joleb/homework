@@ -44,7 +44,13 @@ export default function RootLayout() {
         <GestureHandlerRootView>
           <BottomSheetModalProvider>
             <Stack>
-              <Stack.Screen name="index" />
+              <Stack.Screen
+                name="index"
+                options={{
+                  presentation: "fullScreenModal",
+                  gestureEnabled: false,
+                }}
+              />
               <Stack.Screen name="dashboard" />
             </Stack>
           </BottomSheetModalProvider>

@@ -20,7 +20,6 @@ const htmlEntities: { [key: string]: string } = {
   "&gt;": ">",
   "&quot;": '"',
   "&apos;": "'",
-  // Add more entities as needed
 };
 
 export const stripHtml = (html?: string | null): string => {
