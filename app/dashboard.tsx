@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from "react";
-import { Text, FlatList, ListRenderItemInfo } from "react-native";
+import { Text, FlatList, ListRenderItemInfo, StyleSheet } from "react-native";
 
 import { useRouter } from "expo-router";
 
@@ -9,6 +9,7 @@ import ThemedSeparator from "../components/ThemedSeparator";
 import { isTruthy } from "../utils/general";
 import EdgeItem from "../components/EdgeItem";
 import { ContentNodeEdge } from "../types";
+import Spacing from "../constants/Spacing";
 
 const updateQuery = (
   previousResult: AdminQuery,
@@ -79,8 +80,15 @@ const Dashboard: React.FC = () => {
       refreshing={loading}
       ListFooterComponent={loading ? <Text>Loading more...</Text> : null}
       ItemSeparatorComponent={ThemedSeparator}
+      contentContainerStyle={styles.contentContainer}
     />
   );
 };
 
 export default Dashboard;
+
+const styles = StyleSheet.create({
+  contentContainer: {
+    padding: Spacing.s,
+  },
+});

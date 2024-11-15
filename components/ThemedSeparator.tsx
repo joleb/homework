@@ -1,9 +1,9 @@
 import { View, StyleSheet } from "react-native";
 import { useMemo } from "react";
 
-import { useThemeColor } from "../hooks/useThemeColor";
-
 import { ThemedViewProps } from "./ThemedView";
+
+import { useThemeColor } from "@/hooks/useThemeColor";
 
 const ThemedSeparator = ({
   style,

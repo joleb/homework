@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 
-import { GET_CONTENT_NODES } from "../gql/queries";
+import { GET_CONTENT_NODES } from "@/gql/queries";
 
 interface PaginationVariables {
   before?: string | null;

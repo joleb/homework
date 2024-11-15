@@ -4,8 +4,8 @@ import { View, Text, TextInput, Button, StyleSheet } from "react-native";
 import { useHandleLogin } from "../hooks/useHandleLogin";
 
 const LoginScreen: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState(process.env.EXPO_PUBLIC_EMAIL);
+  const [password, setPassword] = useState(process.env.EXPO_PUBLIC_PASSWORD);
   const { error, handleLogin, loading } = useHandleLogin();
 
   return (

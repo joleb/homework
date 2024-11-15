@@ -12,21 +12,16 @@ export const GET_CONTENT_NODES = gql(`
               description
               image {
                 name
-                fileType
-                fileSize
-                storageKey
                 thumbnailKey
-                accessType
-                tags
-                uploadDateTime
                 id
                 thumbnail
                 url
               }
               shortDescription
-              structureDefinition { 
-                title
+              structureDefinition {
+                  title
               }
+              hasBeenPublishedOnce
             }
           }
           pageInfo {
@@ -38,6 +33,5 @@ export const GET_CONTENT_NODES = gql(`
         }
       }
     }
-  }
-  
+  }  
 `);
