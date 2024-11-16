@@ -1,5 +1,10 @@
-import { Pressable, StyleSheet, View } from "react-native";
-import { useRef } from "react";
+import {
+  Pressable,
+  PressableStateCallbackType,
+  StyleSheet,
+  View,
+} from "react-native";
+import { useCallback, useRef } from "react";
 
 import { Image } from "expo-image";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
@@ -20,14 +25,36 @@ const imageSize = {
   height: 75,
 } as const;
 
-const EdgeItem: React.FC<{ item: ContentNodeEdge }> = ({ item }) => {
+const EdgeItem: React.FC<{
+  item: ContentNodeEdge;
+  drag: () => void;
+  isActive: boolean;
+}> = ({ item, drag, isActive }) => {
   const bottomSheetRef = useRef<BottomSheetModal>(null);
+  const onPress = useCallback(() => {
+    bottomSheetRef.current?.present();
+  }, [bottomSheetRef]);
+
+  const pressableStyles = useCallback(
+    (state: PressableStateCallbackType) => {
+      return StyleSheet.flatten([
+        {
+          opacity: state.pressed || isActive ? 0.5 : 1,
+        },
+        styles.pressableContainer,
+      ]);
+    },
+    [isActive],
+  );
+
   return (
     <>
       <Pressable
         key={item?.node.id}
-        style={styles.pressableContainer}
-        onPress={() => bottomSheetRef.current?.present()}
+        style={pressableStyles}
+        onPress={onPress}
+        disabled={isActive}
+        onLongPress={drag}
       >
         <View style={styles.text}>
           <ThemedText type="defaultSemiBold">
@@ -56,7 +83,6 @@ const EdgeItem: React.FC<{ item: ContentNodeEdge }> = ({ item }) => {
           <Spacer />
         </>
       )}
-
       <BottomSheetWithChildren ref={bottomSheetRef} accessible={false}>
         <DetailsBottomSheetContent item={item} />
       </BottomSheetWithChildren>

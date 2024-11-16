@@ -14,7 +14,7 @@ if (!i18n.isInitialized) {
   i18n.init({
     compatibilityJSON: "v3",
     resources: translations,
-    lng: getLocales()[0].languageCode ?? "en",
+    lng: getLocales()[0]?.languageCode ?? "en",
     fallbackLng: "en",
     defaultNS: "general",
     debug: __DEV__,

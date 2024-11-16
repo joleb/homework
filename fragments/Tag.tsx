@@ -1,4 +1,4 @@
-import { ViewProps, StyleSheet } from "react-native";
+import { StyleSheet, TextProps } from "react-native";
 import { useMemo } from "react";
 
 import { ThemedText } from "@/fragments/ThemedText";
@@ -9,7 +9,7 @@ import {
 import Spacing from "@/constants/Spacing";
 import { Colors } from "@/constants/Colors";
 
-interface TagProps extends ViewProps {
+interface TagProps extends TextProps {
   label: string;
   variant?: "default" | "warning";
 }

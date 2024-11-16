@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 
 import {
   DarkTheme,
@@ -19,31 +19,19 @@ import { useTranslation } from "react-i18next";
 import apolloClient from "../utils/apolloClient";
 
 import { useColorScheme } from "react-native";
+
 import "../utils/i18n";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
-
-const screens = ["index", "dashboard"];
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
-  const { t } = useTranslation("routes");
+  const { t } = useTranslation(["routes", "actions"]);
 
-  const renderScreens = useCallback(() => {
-    return screens.map((screen) => (
-      <Stack.Screen
-        key={screen}
-        name={screen}
-        options={{
-          title: t(screen),
-        }}
-      />
-    ));
-  }, [t]);
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
@@ -59,7 +47,19 @@ export default function RootLayout() {
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <GestureHandlerRootView>
           <BottomSheetModalProvider>
-            <Stack>{renderScreens()}</Stack>
+            <Stack>
+              <Stack.Screen
+                name="index"
+                options={{ title: t("index"), headerBackVisible: false }}
+              />
+              <Stack.Screen
+                name="dashboard"
+                options={{
+                  title: t("dashboard"),
+                  headerBackVisible: false,
+                }}
+              />
+            </Stack>
           </BottomSheetModalProvider>
         </GestureHandlerRootView>
       </ThemeProvider>

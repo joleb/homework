@@ -3,7 +3,8 @@ import { useRef } from "react";
 import { useMutation } from "@apollo/client";
 import * as SecureStore from "expo-secure-store";
 
-import { LOGIN_MUTATION } from "@/gql/mutations";
+import SecureStoreKeys from "@/constants/SecureStoreKeys";
+import LOGIN_MUTATION from "@/gql/mutations/login";
 
 export const useHandleLogin = () => {
   const [login, { loading, error }] = useMutation(LOGIN_MUTATION);
@@ -38,10 +39,9 @@ export const useHandleLogin = () => {
       } = data.Auth.loginJwt;
 
       // Save credentials and token
-      await SecureStore.setItemAsync("email", email);
-      await SecureStore.setItemAsync("password", password);
-      await SecureStore.setItemAsync("accessToken", accessToken);
-
+      await SecureStore.setItemAsync(SecureStoreKeys.email, email);
+      await SecureStore.setItemAsync(SecureStoreKeys.password, password);
+      await SecureStore.setItemAsync(SecureStoreKeys.accessToken, accessToken);
       return true;
     } catch (err) {
       hasError.current = true;

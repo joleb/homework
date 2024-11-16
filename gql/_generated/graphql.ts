@@ -4113,6 +4113,11 @@ export enum CountryCode {
   De = 'DE'
 }
 
+export type CreatableInvoiceData = InvoiceData & {
+  __typename?: 'CreatableInvoiceData';
+  kind: InvoiceDataKind | '%future added value';
+};
+
 export type CreateAvgsPotentialAnalysisLicenseDefinitionInput = {
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   data: AvgsPotentialAnalysisLicenseDefinitionDataInput;
@@ -4776,6 +4781,8 @@ export type CreateTextElementV2Payload = {
 
 export type CreateTransfersReportInput = {
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  transfersCreatedAfter: Scalars['ZonedDateTIme']['input'];
+  transfersCreatedBefore: Scalars['ZonedDateTIme']['input'];
 };
 
 export type CreateTransfersReportPayload = {
@@ -4899,6 +4906,15 @@ export type CreateWordPackagePayload = {
   __typename?: 'CreateWordPackagePayload';
   clientMutationId?: Maybe<Scalars['String']['output']>;
   edge: WordPackageEdge;
+};
+
+export type CreatedInvoiceData = InvoiceData & {
+  __typename?: 'CreatedInvoiceData';
+  createdAt: Scalars['ZonedDateTIme']['output'];
+  invoiceFile?: Maybe<File>;
+  invoiceId: Scalars['String']['output'];
+  invoiceNumber: Scalars['String']['output'];
+  kind: InvoiceDataKind | '%future added value';
 };
 
 export type CreditNoteData = {
@@ -7319,6 +7335,11 @@ export type EmployerInvoicePaymentMethod = SelectedPaymentMethod & {
   selectedPaymentMethodType: SelectedPaymentMethodType | '%future added value';
 };
 
+export type EmptyInvoiceData = InvoiceData & {
+  __typename?: 'EmptyInvoiceData';
+  kind: InvoiceDataKind | '%future added value';
+};
+
 export type EmptyOrderExtension = OrderExtension & {
   __typename?: 'EmptyOrderExtension';
   kind: OrderExtensionKind | '%future added value';
@@ -8288,11 +8309,15 @@ export type InvoiceAddress = {
 };
 
 export type InvoiceData = {
-  __typename?: 'InvoiceData';
-  invoiceFile?: Maybe<File>;
-  invoiceId: Scalars['String']['output'];
-  invoiceNumber?: Maybe<Scalars['String']['output']>;
+  kind: InvoiceDataKind | '%future added value';
 };
+
+export enum InvoiceDataKind {
+  Creatable = 'Creatable',
+  Created = 'Created',
+  Empty = 'Empty',
+  StripeEmpty = 'StripeEmpty'
+}
 
 export type InvoiceSentUpdate = HistoryEventInterface & {
   __typename?: 'InvoiceSentUpdate';
@@ -9785,7 +9810,7 @@ export type Order = Node & {
   history: OrderHistoriesConnection;
   /** The ID of an object */
   id: Scalars['ID']['output'];
-  invoiceData?: Maybe<InvoiceData>;
+  invoiceData: InvoiceData;
   paymentData?: Maybe<PaymentProviderData>;
   purchaser?: Maybe<Purchaser>;
   selectedPaymentDate?: Maybe<Scalars['ZonedDateTIme']['output']>;
@@ -12689,6 +12714,11 @@ export type StripeData = PaymentProviderData & {
   paymentMethod: PaymentMethodType | '%future added value';
 };
 
+export type StripeEmptyInvoiceData = InvoiceData & {
+  __typename?: 'StripeEmptyInvoiceData';
+  kind: InvoiceDataKind | '%future added value';
+};
+
 export type StripeSepaData = PaymentProviderData & {
   __typename?: 'StripeSepaData';
   dataType: PaymentProviderDataType | '%future added value';
@@ -15292,6 +15322,13 @@ export type LoginJwtMutationVariables = Exact<{
 
 export type LoginJwtMutation = { __typename?: 'Mutation', Auth: { __typename?: 'AuthMutations', loginJwt?: { __typename?: 'LoginJwtPayload', loginResult: { __typename?: 'LoginResult', jwtTokens: { __typename?: 'JwtLoginInformation', accessToken: string } } } | null } };
 
+export type LogoutJwtMutationVariables = Exact<{
+  input: LogoutJwtInput;
+}>;
+
+
+export type LogoutJwtMutation = { __typename?: 'Mutation', Auth: { __typename?: 'AuthMutations', logoutJwt?: { __typename?: 'LogoutJwtPayload', clientMutationId?: string | null } | null } };
+
 export type AdminQueryVariables = Exact<{
   before?: InputMaybe<Scalars['String']['input']>;
   after?: InputMaybe<Scalars['String']['input']>;
@@ -15304,4 +15341,5 @@ export type AdminQuery = { __typename?: 'Query', Admin: { __typename?: 'AdminQue
 
 
 export const LoginJwtDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"LoginJwt"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"LoginJwtInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Auth"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"loginJwt"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"loginResult"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"jwtTokens"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accessToken"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<LoginJwtMutation, LoginJwtMutationVariables>;
+export const LogoutJwtDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"LogoutJwt"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"LogoutJwtInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Auth"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"logoutJwt"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clientMutationId"}}]}}]}}]}}]} as unknown as DocumentNode<LogoutJwtMutation, LogoutJwtMutationVariables>;
 export const AdminDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Admin"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Admin"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Tree"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"GetContentNodes"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cursor"}},{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"thumbnailKey"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"thumbnail"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}},{"kind":"Field","name":{"kind":"Name","value":"shortDescription"}},{"kind":"Field","name":{"kind":"Name","value":"structureDefinition"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}}]}},{"kind":"Field","name":{"kind":"Name","value":"hasBeenPublishedOnce"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<AdminQuery, AdminQueryVariables>;

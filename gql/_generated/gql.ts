@@ -14,7 +14,8 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 const documents = {
-    "\nmutation LoginJwt($input: LoginJwtInput!) {\n  Auth {\n    loginJwt(input: $input) {\n      loginResult {\n        jwtTokens {\n          accessToken\n        }\n      }\n    }\n  }\n}\n": types.LoginJwtDocument,
+    "\n  mutation LoginJwt($input: LoginJwtInput!) {\n    Auth {\n      loginJwt(input: $input) {\n        loginResult {\n          jwtTokens {\n            accessToken\n          }\n        }\n      }\n    }\n  }\n  ": types.LoginJwtDocument,
+    "\n  mutation LogoutJwt($input: LogoutJwtInput!) {\n    Auth {\n      logoutJwt(input: $input) {\n        clientMutationId\n      }\n    }\n  }\n  ": types.LogoutJwtDocument,
     "\n  query Admin($before: String, $after: String, $first: Int, $last: Int) {\n    Admin {\n      Tree {\n        GetContentNodes(before: $before, after: $after, first: $first, last: $last) {\n          edges {\n            cursor\n            node {\n              id\n              description\n              image {\n                name\n                thumbnailKey\n                id\n                thumbnail\n                url\n              }\n              shortDescription\n              structureDefinition {\n                  title\n              }\n              hasBeenPublishedOnce\n            }\n          }\n          pageInfo {\n            endCursor\n            startCursor\n            hasNextPage\n            hasPreviousPage\n          }\n        }\n      }\n    }\n  }  \n": types.AdminDocument,
 };
 
@@ -35,7 +36,11 @@ export function gql(source: string): unknown;
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\nmutation LoginJwt($input: LoginJwtInput!) {\n  Auth {\n    loginJwt(input: $input) {\n      loginResult {\n        jwtTokens {\n          accessToken\n        }\n      }\n    }\n  }\n}\n"): (typeof documents)["\nmutation LoginJwt($input: LoginJwtInput!) {\n  Auth {\n    loginJwt(input: $input) {\n      loginResult {\n        jwtTokens {\n          accessToken\n        }\n      }\n    }\n  }\n}\n"];
+export function gql(source: "\n  mutation LoginJwt($input: LoginJwtInput!) {\n    Auth {\n      loginJwt(input: $input) {\n        loginResult {\n          jwtTokens {\n            accessToken\n          }\n        }\n      }\n    }\n  }\n  "): (typeof documents)["\n  mutation LoginJwt($input: LoginJwtInput!) {\n    Auth {\n      loginJwt(input: $input) {\n        loginResult {\n          jwtTokens {\n            accessToken\n          }\n        }\n      }\n    }\n  }\n  "];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation LogoutJwt($input: LogoutJwtInput!) {\n    Auth {\n      logoutJwt(input: $input) {\n        clientMutationId\n      }\n    }\n  }\n  "): (typeof documents)["\n  mutation LogoutJwt($input: LogoutJwtInput!) {\n    Auth {\n      logoutJwt(input: $input) {\n        clientMutationId\n      }\n    }\n  }\n  "];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

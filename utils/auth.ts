@@ -2,7 +2,7 @@ import { jwtDecode } from "jwt-decode";
 import * as SecureStore from "expo-secure-store";
 import { ApolloClient } from "@apollo/client";
 
-import { LOGIN_MUTATION } from "../gql/mutations";
+import LOGIN_MUTATION from "../gql/mutations/login";
 
 export const isTokenExpired = (token: string): boolean => {
   const decoded: { exp: number } = jwtDecode(token);

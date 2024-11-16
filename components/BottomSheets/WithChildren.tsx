@@ -1,5 +1,5 @@
 import React, { useCallback, useImperativeHandle } from "react";
-import { Platform } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 
 import {
   BottomSheetBackdrop,
@@ -9,6 +9,11 @@ import {
 } from "@gorhom/bottom-sheet";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { FullWindowOverlay } from "react-native-screens";
+
+import {
+  CreateStylesColors,
+  useThemeAwareStyles,
+} from "../../hooks/useThemeAwareStyles";
 
 export const AppFullWindowOverlay = ({
   children,
@@ -46,6 +51,7 @@ const BottomSheetWithChildren = React.forwardRef(
   ) => {
     const bottomSheetModalRef = React.useRef<BottomSheetModal>(null);
     const { top: safeAreaTopInset } = useSafeAreaInsets();
+    const styles = useThemeAwareStyles(createStyles);
 
     useImperativeHandle(ref, () => ({
       present: () => {
@@ -75,6 +81,8 @@ const BottomSheetWithChildren = React.forwardRef(
         )}
         backdropComponent={backdropComponent ?? renderBackdrop}
         containerComponent={AppFullWindowOverlay}
+        backgroundStyle={styles.backgroundStyle}
+        handleIndicatorStyle={styles.handleStyle}
         {...props}
       >
         {children}
@@ -84,5 +92,15 @@ const BottomSheetWithChildren = React.forwardRef(
 );
 
 BottomSheetWithChildren.displayName = "BottomSheetWithChildren";
+
+const createStyles = (colors: CreateStylesColors) =>
+  StyleSheet.create({
+    backgroundStyle: {
+      backgroundColor: colors.cardBackground,
+    },
+    handleStyle: {
+      backgroundColor: colors.border,
+    },
+  });
 
 export default BottomSheetWithChildren;
