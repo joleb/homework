@@ -44,7 +44,6 @@ export const useHandleLogin = () => {
           jwtTokens: { accessToken },
         },
       } = data.Auth.loginJwt;
-      console.log("accessToken", accessToken);
       // Save credentials to reissue the token when it expires
       await SecureStore.setItemAsync(SecureStoreKeys.email, email);
       await SecureStore.setItemAsync(SecureStoreKeys.password, password);

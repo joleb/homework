@@ -32,7 +32,6 @@ const EdgeItem: React.FC<{
 }> = ({ item, drag, isActive }) => {
   const bottomSheetRef = useRef<BottomSheetModal>(null);
   const onPress = useCallback(() => {
-    console.log("onPress");
     bottomSheetRef.current?.present();
   }, [bottomSheetRef]);
 

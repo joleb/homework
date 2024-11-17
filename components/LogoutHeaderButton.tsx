@@ -57,7 +57,11 @@ const LogoutHeaderButton: React.FC = () => {
   }, [isLoggingOut, iconColor]);
 
   return (
-    <PressableOpacity onPress={logout} disabled={isLoggingOut}>
+    <PressableOpacity
+      onPress={logout}
+      disabled={isLoggingOut}
+      testID="header_logout"
+    >
       {renderIcon()}
     </PressableOpacity>
   );

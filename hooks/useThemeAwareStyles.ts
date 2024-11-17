@@ -14,7 +14,6 @@ export const useThemeAwareStyles = <T extends Record<string, unknown>>(
   createStyles: Generator<T>,
 ) => {
   const theme = useColorScheme();
-  console.log(theme);
   const styles = useMemo(
     () => createStyles(Colors[theme]),
     [theme, createStyles],

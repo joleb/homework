@@ -107,6 +107,7 @@ const Dashboard: React.FC = () => {
         ItemSeparatorComponent={ThemedSeparator}
         contentContainerStyle={styles.contentContainer}
         initialNumToRender={AMOUNT_OF_NODES_TO_FETCH}
+        testID="dashboard_list"
       />
     </SafeAreaView>
   );

@@ -26,6 +26,8 @@ const DetailsBottomSheetContent: React.FC<DetailsBottomSheetContentProps> = ({
 }) => {
   const { bottom } = useSafeAreaInsets();
   const styles = useThemeAwareStyles(createStyles);
+  // we cant use BottomSheetScrollView with the latest version of expo, so we use ScrollView nested in a view instead
+  // see: https://github.com/gorhom/react-native-bottom-sheet/issues/2035
   return (
     <BottomSheetView
       style={{
@@ -47,14 +49,17 @@ const DetailsBottomSheetContent: React.FC<DetailsBottomSheetContentProps> = ({
               transition={600}
               style={styles.image}
               placeholder={{ blurhash }}
+              testID="bottom_sheet_image"
             />
           </View>
         )}
         <Spacer size={Spacing.l} />
-        <ThemedText type="title">
+        <ThemedText type="title" testID="bottom_sheet_title">
           {item?.node.structureDefinition.title}
         </ThemedText>
-        <ThemedText>{stripHtml(item?.node.description)}</ThemedText>
+        <ThemedText testID="bottom_sheet_description">
+          {stripHtml(item?.node.description)}
+        </ThemedText>
       </ScrollView>
     </BottomSheetView>
   );

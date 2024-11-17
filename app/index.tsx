@@ -65,7 +65,7 @@ const LoginScreen: React.FC = () => {
           clearButtonMode="always"
         />
         <Spacer />
-        <ThemedButton onPress={login} disabled={loading}>
+        <ThemedButton onPress={login} disabled={loading} testID="login_button">
           {t("actions:login")}
         </ThemedButton>
         {hasError && (

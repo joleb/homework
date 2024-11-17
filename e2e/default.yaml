@@ -1,0 +1,25 @@
+appId: host.exp.Exponent
+---
+- launchApp
+- tapOn: "homework" 
+- assertVisible: "Login"
+- tapOn:
+    id: "login_button"
+- assertVisible: "Logged in as root"
+- tapOn:
+    point: "50%,18%"
+- assertVisible:
+    id: "bottom_sheet_image"
+- assertVisible:
+    id: "bottom_sheet_title"
+- assertVisible: "Bottom sheet handle"
+- tapOn: "Bottom sheet handle"
+- "scroll"
+- "scroll"
+- tapOn:
+    id: "header_logout"
+- tapOn: "Cancel"
+- tapOn:
+    id: "header_logout"
+- tapOn: "Confirm"
+- assertVisible: "Login"
