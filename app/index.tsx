@@ -4,17 +4,17 @@ import { View, StyleSheet, Alert } from "react-native";
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 
-import { useHandleLogin } from "../hooks/useHandleLogin";
-import Spacing from "../constants/Spacing";
-import { ThemedText } from "../fragments/ThemedText";
-import ThemedTextInput from "../components/ThemedTextInput";
+import { useHandleLogin } from "@/src/hooks/useHandleLogin";
+import Spacing from "@/src/constants/Spacing";
+import { ThemedText } from "@/src/fragments/ThemedText";
+import ThemedTextInput from "@/src/components/ThemedTextInput";
 import {
   CreateStylesColors,
   useThemeAwareStyles,
-} from "../hooks/useThemeAwareStyles";
-import Spacer from "../fragments/Spacer";
-import ThemedButton from "../fragments/ThemedButton";
-import { useAuth } from "../components/contexts/AuthContext";
+} from "@/src/hooks/useThemeAwareStyles";
+import Spacer from "@/src/fragments/Spacer";
+import ThemedButton from "@/src/fragments/ThemedButton";
+import { useAuth } from "@/src/components/contexts/AuthContext";
 
 const LoginScreen: React.FC = () => {
   const [email, setEmail] = useState(process.env.EXPO_PUBLIC_EMAIL);

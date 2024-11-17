@@ -4,23 +4,21 @@ import { ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-
-import "react-native-reanimated";
-
 import { ApolloProvider } from "@apollo/client";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useTranslation } from "react-i18next";
 
-import apolloClient from "../utils/apolloClient";
-
-import "../utils/i18n";
-import useColorScheme from "../hooks/useColorScheme";
+import apolloClient from "@/src/utils/apolloClient";
+import useColorScheme from "@/src/hooks/useColorScheme";
 import {
   darkNavigationTheme,
   lightNavigationTheme,
-} from "../constants/NavigationTheme";
-import { AuthProvider } from "../components/contexts/AuthContext";
+} from "@/src/constants/NavigationTheme";
+import { AuthProvider } from "@/src/components/contexts/AuthContext";
+
+import "@/src/utils/i18n";
+import "react-native-reanimated";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();

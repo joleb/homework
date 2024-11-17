@@ -9,18 +9,18 @@ import DraggableFlatList, {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather } from "@expo/vector-icons";
 
-import useGetDocumentNodes from "../hooks/useGetDocumentNodes";
-import ThemedSeparator from "../fragments/ThemedSeparator";
-import { isTruthy } from "../utils/general";
-import EdgeItem from "../components/EdgeItem";
-import { ContentNodeEdge } from "../types";
-import Spacing from "../constants/Spacing";
-import { ThemedText } from "../fragments/ThemedText";
-import LogoutHeaderButton from "../components/LogoutHeaderButton";
-import { useAuth } from "../components/contexts/AuthContext";
-import Spacer from "../fragments/Spacer";
-import { useThemeColor } from "../hooks/useThemeColor";
-import { updateQuery } from "../utils/dashboard";
+import useGetDocumentNodes from "@/src/hooks/useGetDocumentNodes";
+import ThemedSeparator from "@/src/fragments/ThemedSeparator";
+import { isTruthy } from "@/src/utils/general";
+import EdgeItem from "@/src/components/EdgeItem";
+import { ContentNodeEdge } from "@/src/types";
+import Spacing from "@/src/constants/Spacing";
+import { ThemedText } from "@/src/fragments/ThemedText";
+import LogoutHeaderButton from "@/src/components/LogoutHeaderButton";
+import { useAuth } from "@/src/components/contexts/AuthContext";
+import Spacer from "@/src/fragments/Spacer";
+import { useThemeColor } from "@/src/hooks/useThemeColor";
+import { updateQuery } from "@/src/utils/dashboard";
 
 const AMOUNT_OF_NODES_TO_FETCH = 10;
 

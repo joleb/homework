@@ -1,10 +1,10 @@
 import { CodegenConfig } from "@graphql-codegen/cli";
 
-import { API_URL } from "./constants/api";
+import { API_URL } from "./src/constants/api";
 
 const config: CodegenConfig = {
   schema: API_URL,
-  documents: ["./gql/queries.ts", "./gql/mutations/*.ts"],
+  documents: ["./src/gql/queries.ts", "./src/gql/mutations/*.ts"],
   generates: {
     "./gql/_generated/": {
       preset: "client",
