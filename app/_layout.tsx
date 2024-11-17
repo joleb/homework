@@ -1,24 +1,26 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 
+import { ApolloProvider } from "@apollo/client";
 import { ThemeProvider } from "@react-navigation/native";
-import { useFonts } from "expo-font";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { ApolloProvider } from "@apollo/client";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useTranslation } from "react-i18next";
+import { useFonts } from "expo-font";
 
-import apolloClient from "@/src/utils/apolloClient";
-import useColorScheme from "@/src/hooks/useColorScheme";
+import apolloClient from "../src/utils/apolloClient";
+
 import {
   darkNavigationTheme,
   lightNavigationTheme,
 } from "@/src/constants/NavigationTheme";
-import { AuthProvider } from "@/src/components/contexts/AuthContext";
+import { AuthProvider, useAuth } from "@/src/components/contexts/AuthContext";
 
 import "@/src/utils/i18n";
 import "react-native-reanimated";
+
+import useColorScheme from "../src/hooks/useColorScheme";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -50,25 +52,36 @@ const RootLayout = () => {
         <GestureHandlerRootView>
           <BottomSheetModalProvider>
             <AuthProvider>
-              <Stack>
-                <Stack.Screen
-                  name="index"
-                  options={{ title: t("index"), headerBackVisible: false }}
-                />
-                <Stack.Screen
-                  name="dashboard"
-                  options={{
-                    title: t("dashboard"),
-                    headerBackVisible: false,
-                    gestureEnabled: false,
-                  }}
-                />
-              </Stack>
+              <AppNavigator />
             </AuthProvider>
           </BottomSheetModalProvider>
         </GestureHandlerRootView>
       </ThemeProvider>
     </ApolloProvider>
+  );
+};
+
+const AppNavigator = () => {
+  const { t } = useTranslation(["routes", "actions"]);
+  const { isLoggedIn } = useAuth();
+
+  return (
+    <Stack>
+      <Stack.Screen
+        name="index"
+        options={{ title: t("index"), headerBackVisible: false }}
+      />
+      {isLoggedIn && (
+        <Stack.Screen
+          name="dashboard"
+          options={{
+            title: t("dashboard"),
+            headerBackVisible: false,
+            gestureEnabled: false,
+          }}
+        />
+      )}
+    </Stack>
   );
 };
 

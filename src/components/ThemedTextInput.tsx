@@ -6,25 +6,30 @@ import {
 } from "react-native";
 import { useMemo } from "react";
 
-import { ThemedText } from "../fragments/ThemedText";
-import Spacing from "../constants/Spacing";
+import { useTranslation } from "react-i18next";
+
+import { ThemedText } from "@/src/fragments/ThemedText";
+import Spacing from "@/src/constants/Spacing";
 import {
   CreateStylesColors,
   useThemeAwareStyles,
-} from "../hooks/useThemeAwareStyles";
-import Spacer from "../fragments/Spacer";
-import { useThemeColor } from "../hooks/useThemeColor";
+} from "@/src/hooks/useThemeAwareStyles";
+import Spacer from "@/src/fragments/Spacer";
+import { useThemeColor } from "@/src/hooks/useThemeColor";
 
 interface TextInputProps extends RNTextInputProps {
   label: string;
+  error?: string;
 }
 
 const ThemedTextInput: React.FC<TextInputProps> = ({
   label,
   style,
+  error,
   ...props
 }) => {
   const styles = useThemeAwareStyles(createStyles);
+  const { t } = useTranslation("errorMessages");
   const placeholderTextColor = useThemeColor({}, "textInputPlaceholder");
   const flattenedStyles = useMemo(
     () => StyleSheet.flatten([styles.container, style]),
@@ -40,6 +45,14 @@ const ThemedTextInput: React.FC<TextInputProps> = ({
         placeholderTextColor={placeholderTextColor}
         {...props}
       />
+      {error && (
+        <>
+          <Spacer size={Spacing.xS} />
+          <ThemedText type="captionRegular" variant="warning">
+            {t(error)}
+          </ThemedText>
+        </>
+      )}
     </View>
   );
 };

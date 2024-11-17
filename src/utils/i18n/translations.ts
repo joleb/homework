@@ -21,6 +21,8 @@ const translations = {
       loginFailed: "Login failed. Please try again.",
       loadingContentNodes: "Error loading content nodes.",
       logoutFailed: "Logout failed.",
+      invalidEmail: "Invalid email address.",
+      required: "Required",
     },
     prompt: {
       hint: "Hint",
@@ -51,6 +53,8 @@ const translations = {
       loadingContentNodes: "Fehler beim Laden von Inhaltselementen.",
       loginFailed: "Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.",
       logoutFailed: "Abmeldung fehlgeschlagen.",
+      invalidEmail: "Ungültige E-Mail-Adresse.",
+      required: "Erforderlich",
     },
     prompt: {
       hint: "Hinweis",

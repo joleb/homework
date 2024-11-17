@@ -1,5 +1,6 @@
 {
   "expo": {
+    "newArchEnabled": true,
     "name": "homework",
     "slug": "homework",
     "version": "1.0.0",
@@ -9,17 +10,10 @@
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#b9b9b9"
     },
     "ios": {
-      "supportsTablet": false,
-      "bundleIdentifier": "com.anonymous.homework"
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+      "supportsTablet": false
     },
     "web": {
       "bundler": "metro",

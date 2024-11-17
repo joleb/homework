@@ -3,6 +3,10 @@ import { View, StyleSheet, Alert } from "react-native";
 
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
+import { z } from "zod";
+
+import { loginFormSchema } from "../src/formSchemas/login";
+import { setFormValue, validateForm } from "../src/utils/form";
 
 import { useHandleLogin } from "@/src/hooks/useHandleLogin";
 import Spacing from "@/src/constants/Spacing";
@@ -17,8 +21,20 @@ import ThemedButton from "@/src/fragments/ThemedButton";
 import { useAuth } from "@/src/components/contexts/AuthContext";
 
 const LoginScreen: React.FC = () => {
-  const [email, setEmail] = useState(process.env.EXPO_PUBLIC_EMAIL);
-  const [password, setPassword] = useState(process.env.EXPO_PUBLIC_PASSWORD);
+  // using env variables for development purposes and simple e2e testing
+  const [loginValues, setLoginValues] = useState<
+    z.infer<typeof loginFormSchema>
+  >({
+    email: {
+      value: process.env.EXPO_PUBLIC_EMAIL || "",
+      error: "",
+    },
+    password: {
+      value: process.env.EXPO_PUBLIC_PASSWORD || "",
+      error: "",
+    },
+  });
+
   const { setUserName, setIsLoggedIn } = useAuth();
   const { t } = useTranslation([
     "general",
@@ -31,6 +47,19 @@ const LoginScreen: React.FC = () => {
   const styles = useThemeAwareStyles(createStyles);
 
   const login = useCallback(async () => {
+    const { success } = validateForm(
+      loginFormSchema,
+      loginValues,
+      setLoginValues,
+    );
+
+    if (!success) {
+      return;
+    }
+    const {
+      email: { value: email },
+      password: { value: password },
+    } = loginValues;
     const result = await handleLogin({
       email,
       password,
@@ -43,7 +72,7 @@ const LoginScreen: React.FC = () => {
     setIsLoggedIn(true);
     setUserName(result);
     router.push("/dashboard");
-  }, [email, password, handleLogin, t, setIsLoggedIn, setUserName]);
+  }, [loginValues, handleLogin, t, setIsLoggedIn, setUserName]);
 
   return (
     <View style={styles.container}>
@@ -51,21 +80,23 @@ const LoginScreen: React.FC = () => {
         <ThemedTextInput
           label={t("username")}
           placeholder={t("input:pleaseEnter", { field: t("username") })}
-          value={email}
-          onChangeText={setEmail}
+          value={loginValues.email.value}
+          onChangeText={setFormValue("email", setLoginValues)}
           clearButtonMode="always"
+          error={loginValues.email.error}
         />
         <Spacer />
         <ThemedTextInput
           label={t("password")}
           placeholder={t("input:pleaseEnter", { field: t("password") })}
-          value={password}
-          onChangeText={setPassword}
+          value={loginValues.password.value}
+          onChangeText={setFormValue("password", setLoginValues)}
           secureTextEntry
           clearButtonMode="always"
+          error={loginValues.password.error}
         />
         <Spacer />
-        <ThemedButton onPress={login} disabled={loading} testID="login_button">
+        <ThemedButton onPress={login} testID="login_button" isLoading={loading}>
           {t("actions:login")}
         </ThemedButton>
         {hasError && (

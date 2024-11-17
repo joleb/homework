@@ -1,5 +1,5 @@
 import React from "react";
-import { PressableProps, StyleSheet } from "react-native";
+import { ActivityIndicator, PressableProps, StyleSheet } from "react-native";
 
 import { ThemedText } from "./ThemedText";
 import PressableOpacity from "./PressableOpacity";
@@ -14,6 +14,7 @@ import { darkColors, lightColors } from "@/src/constants/Colors";
 interface ThemedButtonProps extends PressableProps {
   children: string;
   variant?: "primary" | "secondary";
+  isLoading?: boolean;
 }
 const customHitSlop = {
   top: 8,
@@ -37,13 +38,24 @@ const ThemedButton: React.FC<ThemedButtonProps> = ({
   style,
   hitSlop = customHitSlop,
   variant = "primary",
+  isLoading,
+  disabled,
   ...props
 }) => {
   const styles = useThemeAwareStyles(createStyles);
   const customStyle = StyleSheet.flatten([styles.container, style]);
   return (
-    <PressableOpacity style={customStyle} hitSlop={hitSlop} {...props}>
-      <ThemedText {...textVariantColorMap[variant]}>{children}</ThemedText>
+    <PressableOpacity
+      disabled={isLoading || disabled}
+      style={customStyle}
+      hitSlop={hitSlop}
+      {...props}
+    >
+      {isLoading ? (
+        <ActivityIndicator size={"small"} />
+      ) : (
+        <ThemedText {...textVariantColorMap[variant]}>{children}</ThemedText>
+      )}
     </PressableOpacity>
   );
 };
@@ -57,5 +69,7 @@ const createStyles = (colors: CreateStylesColors) =>
       alignSelf: "center",
       borderRadius: 24,
       backgroundColor: colors.buttonPrimaryBackground,
+      justifyContent: "center",
+      height: 48,
     },
   });

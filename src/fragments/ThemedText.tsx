@@ -13,7 +13,8 @@ export type ThemedTextProps = TextProps & {
     | "subtitle"
     | "link"
     | "caption"
-    | "small";
+    | "small"
+    | "captionRegular";
   variant?: "default" | "warning";
 };
 
@@ -72,8 +73,13 @@ const styles = StyleSheet.create({
     color: "#0a7ea4",
   },
   caption: {
-    fontSize: 12,
+    fontSize: 14,
     lineHeight: 16,
     fontWeight: "bold",
+  },
+  captionRegular: {
+    fontSize: 12,
+    lineHeight: 16,
+    fontWeight: "400",
   },
 });
