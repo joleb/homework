@@ -14,10 +14,12 @@ import {
 } from "../hooks/useThemeAwareStyles";
 import Spacer from "../fragments/Spacer";
 import ThemedButton from "../fragments/ThemedButton";
+import { useAuth } from "../components/contexts/AuthContext";
 
 const LoginScreen: React.FC = () => {
   const [email, setEmail] = useState(process.env.EXPO_PUBLIC_EMAIL);
   const [password, setPassword] = useState(process.env.EXPO_PUBLIC_PASSWORD);
+  const { setUserName, setIsLoggedIn } = useAuth();
   const { t } = useTranslation([
     "general",
     "actions",
@@ -33,12 +35,15 @@ const LoginScreen: React.FC = () => {
       email,
       password,
     });
+
     if (!result) {
       Alert.alert(t("errorMessages:loginFailed"));
       return;
     }
+    setIsLoggedIn(true);
+    setUserName(result);
     router.push("/dashboard");
-  }, [email, password, handleLogin, t]);
+  }, [email, password, handleLogin, t, setIsLoggedIn, setUserName]);
 
   return (
     <View style={styles.container}>

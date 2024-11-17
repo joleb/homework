@@ -1,10 +1,6 @@
 import { useEffect } from "react";
 
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
+import { ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -18,14 +14,18 @@ import { useTranslation } from "react-i18next";
 
 import apolloClient from "../utils/apolloClient";
 
-import { useColorScheme } from "react-native";
-
 import "../utils/i18n";
+import useColorScheme from "../hooks/useColorScheme";
+import {
+  darkNavigationTheme,
+  lightNavigationTheme,
+} from "../constants/NavigationTheme";
+import { AuthProvider } from "../components/contexts/AuthContext";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
+const RootLayout = () => {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
@@ -44,25 +44,34 @@ export default function RootLayout() {
 
   return (
     <ApolloProvider client={apolloClient}>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+      <ThemeProvider
+        value={
+          colorScheme === "dark" ? darkNavigationTheme : lightNavigationTheme
+        }
+      >
         <GestureHandlerRootView>
           <BottomSheetModalProvider>
-            <Stack>
-              <Stack.Screen
-                name="index"
-                options={{ title: t("index"), headerBackVisible: false }}
-              />
-              <Stack.Screen
-                name="dashboard"
-                options={{
-                  title: t("dashboard"),
-                  headerBackVisible: false,
-                }}
-              />
-            </Stack>
+            <AuthProvider>
+              <Stack>
+                <Stack.Screen
+                  name="index"
+                  options={{ title: t("index"), headerBackVisible: false }}
+                />
+                <Stack.Screen
+                  name="dashboard"
+                  options={{
+                    title: t("dashboard"),
+                    headerBackVisible: false,
+                    gestureEnabled: false,
+                  }}
+                />
+              </Stack>
+            </AuthProvider>
           </BottomSheetModalProvider>
         </GestureHandlerRootView>
       </ThemeProvider>
     </ApolloProvider>
   );
-}
+};
+
+export default RootLayout;

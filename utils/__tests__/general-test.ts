@@ -1,4 +1,4 @@
-import { isTruthy, stripHtml } from "../general";
+import { isKeyOfObject, isTruthy, stripHtml } from "../general";
 
 describe("isTruthy", () => {
   it("should return true for truthy values", () => {
@@ -46,5 +46,32 @@ describe("stripHtml", () => {
     const text = "Hello world!";
     const result = stripHtml(text);
     expect(result).toBe(text);
+  });
+});
+
+describe("isKeyOfObject", () => {
+  it("should return true if the key exists in the object", () => {
+    const obj = { a: 1, b: 2, c: 3 };
+    expect(isKeyOfObject(obj, "a")).toBe(true);
+    expect(isKeyOfObject(obj, "b")).toBe(true);
+    expect(isKeyOfObject(obj, "c")).toBe(true);
+  });
+
+  it("should return false if the key does not exist in the object", () => {
+    const obj = { a: 1, b: 2, c: 3 };
+    expect(isKeyOfObject(obj, "d")).toBe(false);
+    expect(isKeyOfObject(obj, "e")).toBe(false);
+    expect(isKeyOfObject(obj, "f")).toBe(false);
+  });
+
+  it("should return false if the key is null or undefined", () => {
+    const obj = { a: 1, b: 2, c: 3 };
+    expect(isKeyOfObject(obj, null)).toBe(false);
+    expect(isKeyOfObject(obj, undefined)).toBe(false);
+  });
+
+  it("should return false if the object is empty", () => {
+    const obj = {};
+    expect(isKeyOfObject(obj, "a")).toBe(false);
   });
 });

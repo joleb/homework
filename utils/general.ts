@@ -20,6 +20,32 @@ const htmlEntities: { [key: string]: string } = {
   "&gt;": ">",
   "&quot;": '"',
   "&apos;": "'",
+  "&rsquo;": "’",
+  "&nbsp;": " ",
+  "&ndash;": "–",
+  "&mdash;": "—",
+  "&hellip;": "…",
+  "&ldquo;": "“",
+  "&rdquo;": "”",
+  "&bdquo;": "„",
+  "&laquo;": "«",
+  "&raquo;": "»",
+  "&lsaquo;": "‹",
+  "&rsaquo;": "›",
+  "&copy;": "©",
+  "&reg;": "®",
+  "&trade;": "™",
+  "&deg;": "°",
+  "&plusmn;": "±",
+  "&times;": "×",
+  "&divide;": "÷",
+  "&frac14;": "¼",
+  "&frac12;": "½",
+  "&euro;": "€",
+  "&cent;": "¢",
+  "&pound;": "£",
+  "&yen;": "¥",
+  "&curren;": "¤",
 };
 
 export const stripHtml = (html?: string | null): string => {
@@ -36,3 +62,8 @@ export const stripHtml = (html?: string | null): string => {
 
   return text;
 };
+
+export const isKeyOfObject = <T extends object>(
+  objectToContainKey: T,
+  key?: PropertyKey | null,
+): key is keyof T => !!key && key in objectToContainKey;

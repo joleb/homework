@@ -1,5 +1,5 @@
 import React from "react";
-import { Pressable, PressableProps, StyleSheet } from "react-native";
+import { PressableProps, StyleSheet } from "react-native";
 
 import Spacing from "../constants/Spacing";
 import {
@@ -9,6 +9,7 @@ import {
 import { darkColors, lightColors } from "../constants/Colors";
 
 import { ThemedText } from "./ThemedText";
+import PressableOpacity from "./PressableOpacity";
 
 interface ThemedButtonProps extends PressableProps {
   children: string;
@@ -39,10 +40,11 @@ const ThemedButton: React.FC<ThemedButtonProps> = ({
   ...props
 }) => {
   const styles = useThemeAwareStyles(createStyles);
+  const customStyle = StyleSheet.flatten([styles.container, style]);
   return (
-    <Pressable style={styles.container} hitSlop={hitSlop} {...props}>
+    <PressableOpacity style={customStyle} hitSlop={hitSlop} {...props}>
       <ThemedText {...textVariantColorMap[variant]}>{children}</ThemedText>
-    </Pressable>
+    </PressableOpacity>
   );
 };
 export default ThemedButton;

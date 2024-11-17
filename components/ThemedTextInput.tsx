@@ -13,6 +13,7 @@ import {
   useThemeAwareStyles,
 } from "../hooks/useThemeAwareStyles";
 import Spacer from "../fragments/Spacer";
+import { useThemeColor } from "../hooks/useThemeColor";
 
 interface TextInputProps extends RNTextInputProps {
   label: string;
@@ -24,6 +25,7 @@ const ThemedTextInput: React.FC<TextInputProps> = ({
   ...props
 }) => {
   const styles = useThemeAwareStyles(createStyles);
+  const placeholderTextColor = useThemeColor({}, "textInputPlaceholder");
   const flattenedStyles = useMemo(
     () => StyleSheet.flatten([styles.container, style]),
     [style, styles],
@@ -32,7 +34,12 @@ const ThemedTextInput: React.FC<TextInputProps> = ({
     <View>
       <ThemedText type="caption">{label}</ThemedText>
       <Spacer size={Spacing.xS} />
-      <RNTextInput style={flattenedStyles} {...props} />
+      <RNTextInput
+        style={flattenedStyles}
+        cursorColor={styles.container.color}
+        placeholderTextColor={placeholderTextColor}
+        {...props}
+      />
     </View>
   );
 };
@@ -47,5 +54,6 @@ const createStyles = (colors: CreateStylesColors) =>
       borderWidth: 2,
       borderRadius: 8,
       backgroundColor: colors.textInputBackground,
+      color: colors.text,
     },
   });

@@ -10,4 +10,9 @@ echo ""
 echo "🦦 Running lint-staged"
 yarn lint-staged
 echo "🎉 lint-staged done"
-
+echo ""
+echo "---"
+echo ""
+echo "🦦 Running jest"
+yarn jest
+echo "🎉 jest done"

@@ -4,10 +4,12 @@ import { useMutation } from "@apollo/client";
 import * as SecureStore from "expo-secure-store";
 
 import SecureStoreKeys from "@/constants/SecureStoreKeys";
+import LOGIN_JWT_MUTATION from "@/gql/mutations/loginJwt";
 import LOGIN_MUTATION from "@/gql/mutations/login";
 
 export const useHandleLogin = () => {
-  const [login, { loading, error }] = useMutation(LOGIN_MUTATION);
+  const [loginJwt, { loading, error }] = useMutation(LOGIN_JWT_MUTATION);
+  const [login] = useMutation(LOGIN_MUTATION);
   const hasError = useRef(false);
 
   const handleLogin = async ({
@@ -22,13 +24,18 @@ export const useHandleLogin = () => {
       return false;
     }
     try {
-      const { data } = await login({
+      const { data } = await loginJwt({
         variables: {
           input: { email, password },
         },
       });
+      const { data: loginData } = await login({
+        variables: {
+          loginInput: { email, password },
+        },
+      });
 
-      if (!data || !data.Auth?.loginJwt) {
+      if (!data || !data.Auth?.loginJwt || !loginData) {
         throw new Error("Login failed");
       }
 
@@ -37,12 +44,14 @@ export const useHandleLogin = () => {
           jwtTokens: { accessToken },
         },
       } = data.Auth.loginJwt;
-
-      // Save credentials and token
+      console.log("accessToken", accessToken);
+      // Save credentials to reissue the token when it expires
       await SecureStore.setItemAsync(SecureStoreKeys.email, email);
       await SecureStore.setItemAsync(SecureStoreKeys.password, password);
+      // Save the access token
       await SecureStore.setItemAsync(SecureStoreKeys.accessToken, accessToken);
-      return true;
+      hasError.current = false;
+      return loginData.Auth.login?.accounts[0]?.name;
     } catch (err) {
       hasError.current = true;
       console.error("Login error:", err);

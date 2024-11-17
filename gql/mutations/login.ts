@@ -1,17 +1,15 @@
 import { gql } from "../_generated";
 
 const LOGIN_MUTATION = gql(`
-  mutation LoginJwt($input: LoginJwtInput!) {
+  mutation Login($loginInput: LoginInput!) {
     Auth {
-      loginJwt(input: $input) {
-        loginResult {
-          jwtTokens {
-            accessToken
-          }
+      login(input: $loginInput) {
+        accounts {
+          name
         }
       }
     }
   }
-  `);
+`);
 
 export default LOGIN_MUTATION;

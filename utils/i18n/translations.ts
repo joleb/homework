@@ -4,6 +4,7 @@ const translations = {
       username: "Username",
       password: "Password",
       loading: "Loading...",
+      loggedInAs: "Logged in as {{name}}",
     },
     actions: {
       login: "Login",
@@ -21,12 +22,19 @@ const translations = {
       loadingContentNodes: "Error loading content nodes.",
       logoutFailed: "Logout failed.",
     },
+    prompt: {
+      hint: "Hint",
+      logout: "Are you sure you want to log out?",
+      cancel: "Cancel",
+      confirm: "Confirm",
+    },
   },
   de: {
     general: {
       username: "Nutzername",
       password: "Passwort",
       loading: "Laden...",
+      loggedInAs: "Angemeldet als {{name}}",
     },
     actions: {
       login: "Anmelden",
@@ -43,6 +51,12 @@ const translations = {
       loadingContentNodes: "Fehler beim Laden von Inhaltselementen.",
       loginFailed: "Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.",
       logoutFailed: "Abmeldung fehlgeschlagen.",
+    },
+    prompt: {
+      hint: "Hinweis",
+      logout: "Möchten Sie sich wirklich abmelden?",
+      cancel: "Abbrechen",
+      confirm: "Bestätigen",
     },
   },
 };

@@ -1,13 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
-import {
-  StyleSheet,
-  View,
-  ActivityIndicator,
-  Alert,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, View, ActivityIndicator } from "react-native";
 
-import { useNavigation, useRouter } from "expo-router";
+import { useNavigation } from "expo-router";
 import { useTranslation } from "react-i18next";
 import DraggableFlatList, {
   RenderItemParams,
@@ -16,81 +10,49 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather } from "@expo/vector-icons";
 
 import useGetDocumentNodes from "../hooks/useGetDocumentNodes";
-import { AdminQuery } from "../gql/_generated/graphql";
 import ThemedSeparator from "../fragments/ThemedSeparator";
 import { isTruthy } from "../utils/general";
 import EdgeItem from "../components/EdgeItem";
 import { ContentNodeEdge } from "../types";
 import Spacing from "../constants/Spacing";
 import { ThemedText } from "../fragments/ThemedText";
-import useHandleLogout from "../hooks/useHandleLogout";
+import LogoutHeaderButton from "../components/LogoutHeaderButton";
+import { useAuth } from "../components/contexts/AuthContext";
+import Spacer from "../fragments/Spacer";
 import { useThemeColor } from "../hooks/useThemeColor";
+import { updateQuery } from "../utils/dashboard";
 
-const updateQuery = (
-  previousResult: AdminQuery,
-  { fetchMoreResult }: { fetchMoreResult: AdminQuery },
-) => {
-  if (!fetchMoreResult) return previousResult;
-  return {
-    Admin: {
-      ...previousResult.Admin,
-      Tree: {
-        ...previousResult.Admin.Tree,
-        GetContentNodes: {
-          ...previousResult.Admin.Tree.GetContentNodes,
-          edges: [
-            ...(previousResult.Admin.Tree.GetContentNodes.edges || []),
-            ...(fetchMoreResult.Admin.Tree.GetContentNodes.edges || []),
-          ],
-          pageInfo: fetchMoreResult.Admin.Tree.GetContentNodes.pageInfo,
-        },
-      },
-    },
-  };
-};
+const AMOUNT_OF_NODES_TO_FETCH = 10;
 
 const Dashboard: React.FC = () => {
   const { data, loading, error, fetchMore } = useGetDocumentNodes({
-    first: 10,
+    first: AMOUNT_OF_NODES_TO_FETCH,
   });
-  const iconColor = useThemeColor({}, "text");
-  const router = useRouter();
+  const errorColor = useThemeColor({}, "error");
   const navigation = useNavigation();
   const { t } = useTranslation(["general", "errorMessages"]);
-  const { handleLogout } = useHandleLogout();
-  navigation.setOptions({
-    headerRight: () => (
-      <TouchableOpacity onPress={logout}>
-        <Feather name="log-out" size={18} color={iconColor} />
-      </TouchableOpacity>
-    ),
-  });
-  const logout = async () => {
-    await handleLogout()
-      .then((success) => {
-        if (!success) {
-          Alert.alert(t("errorMessages:logoutFailed"));
-          return;
-        }
-        router.push("/");
-      })
-      .catch((err) => {
-        Alert.alert(t("errorMessages:logoutFailed"));
-        console.error("Logout error:", err);
-      });
-  };
+  const { userName } = useAuth();
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <LogoutHeaderButton />,
+      title: t("general:loggedInAs", { name: userName }),
+    });
+  }, [navigation, t, userName]);
+
   const [filteredDataState, setFilteredData] = useState<ContentNodeEdge[]>([]);
+
   const handleLoadMore = useCallback(() => {
     if (data?.Admin?.Tree?.GetContentNodes?.pageInfo?.hasNextPage) {
       const endCursor = data.Admin.Tree.GetContentNodes.pageInfo.endCursor;
       fetchMore({
-        variables: { after: endCursor, first: 10 },
+        variables: { after: endCursor, first: AMOUNT_OF_NODES_TO_FETCH },
         updateQuery,
       });
     }
   }, [data, fetchMore]);
+
   useEffect(() => {
-    // Filter out nodes without a title
     const returnData = data?.Admin?.Tree?.GetContentNodes?.edges
       ?.filter(isTruthy)
       .filter((edge) => !!edge?.node?.structureDefinition.title.trim());
@@ -108,19 +70,27 @@ const Dashboard: React.FC = () => {
     [],
   );
 
-  if (loading)
+  if (loading) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size={"large"} />
+      <View style={styles.alertContainer}>
+        <ActivityIndicator size="large" />
+        <Spacer />
         <ThemedText type="defaultSemiBold">{t("general:loading")}</ThemedText>
       </View>
     );
-  if (error)
+  }
+
+  if (error) {
     return (
-      <ThemedText type="defaultSemiBold">
-        {t("errorMessages:loadingContentNodes")}
-      </ThemedText>
+      <View style={styles.alertContainer}>
+        <Feather name="alert-triangle" size={32} color={errorColor} />
+        <Spacer />
+        <ThemedText type="defaultSemiBold">
+          {t("errorMessages:loadingContentNodes")}
+        </ThemedText>
+      </View>
     );
+  }
 
   return (
     <SafeAreaView edges={["bottom", "left", "right"]}>
@@ -128,7 +98,7 @@ const Dashboard: React.FC = () => {
         data={filteredDataState}
         renderItem={renderItem}
         keyExtractor={(item, index) =>
-          item?.node?.id ?? "draggable-item-" + index
+          item?.node?.id ?? `draggable-item-${index}`
         }
         onDragEnd={handleDragEnd}
         onEndReached={handleLoadMore}
@@ -136,6 +106,7 @@ const Dashboard: React.FC = () => {
         refreshing={loading}
         ItemSeparatorComponent={ThemedSeparator}
         contentContainerStyle={styles.contentContainer}
+        initialNumToRender={AMOUNT_OF_NODES_TO_FETCH}
       />
     </SafeAreaView>
   );
@@ -145,9 +116,10 @@ export default Dashboard;
 
 const styles = StyleSheet.create({
   contentContainer: {
-    padding: Spacing.s,
+    paddingVertical: Spacing.s,
+    paddingHorizontal: Spacing.m,
   },
-  loadingContainer: {
+  alertContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",

@@ -1,5 +1,6 @@
 import { useMemo } from "react";
-import { useColorScheme } from "react-native";
+
+import useColorScheme from "./useColorScheme";
 
 import { Colors, AvailableThemedColors } from "@/constants/Colors";
 
@@ -12,7 +13,8 @@ type Generator<T extends Record<string, unknown>> = (
 export const useThemeAwareStyles = <T extends Record<string, unknown>>(
   createStyles: Generator<T>,
 ) => {
-  const theme = useColorScheme() ?? "light";
+  const theme = useColorScheme();
+  console.log(theme);
   const styles = useMemo(
     () => createStyles(Colors[theme]),
     [theme, createStyles],
