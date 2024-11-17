@@ -5,9 +5,9 @@ import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
-import { loginFormSchema } from "../src/formSchemas/login";
-import { setFormValue, validateForm } from "../src/utils/form";
-
+import { loginFormSchema } from "@/src/formSchemas/login";
+import { setFormValue, validateForm } from "@/src/utils/form";
+import useIsLoggedIn from "@/src/hooks/useIsLoggedIn";
 import { useHandleLogin } from "@/src/hooks/useHandleLogin";
 import Spacing from "@/src/constants/Spacing";
 import { ThemedText } from "@/src/fragments/ThemedText";
@@ -18,7 +18,7 @@ import {
 } from "@/src/hooks/useThemeAwareStyles";
 import Spacer from "@/src/fragments/Spacer";
 import ThemedButton from "@/src/fragments/ThemedButton";
-import { useAuth } from "@/src/components/contexts/AuthContext";
+import { useAuth } from "@/src/components/provider/AuthProvider";
 
 const LoginScreen: React.FC = () => {
   // using env variables for development purposes and simple e2e testing
@@ -34,7 +34,7 @@ const LoginScreen: React.FC = () => {
       error: "",
     },
   });
-
+  useIsLoggedIn();
   const { setUserName, setIsLoggedIn } = useAuth();
   const { t } = useTranslation([
     "general",

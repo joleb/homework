@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 
-const defaultHitSlop = { top: 5, right: 5, bottom: 5, left: 5 };
+const defaultHitSlop = { top: 8, right: 8, bottom: 8, left: 8 };
 
 const PressableOpacity: React.FC<
   PressableProps & {

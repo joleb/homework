@@ -2,10 +2,10 @@ import { renderHook, act } from "@testing-library/react-native";
 import { useMutation } from "@apollo/client";
 import * as SecureStore from "expo-secure-store";
 
-import { useHandleLogin } from "../useHandleLogin"; // Adjust the import path
+import { useHandleLogin } from "../useHandleLogin";
 
-import LOGIN_JWT_MUTATION from "@/src/gql/mutations/loginJwt"; // Import the actual mutation
-import LOGIN_MUTATION from "@/src/gql/mutations/login"; // Import the actual mutation
+import LOGIN_JWT_MUTATION from "@/src/gql/mutations/loginJwt";
+import LOGIN_MUTATION from "@/src/gql/mutations/login";
 
 jest.mock("@apollo/client", () => ({
   useMutation: jest.fn(),

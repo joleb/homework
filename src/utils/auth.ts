@@ -2,6 +2,8 @@ import { jwtDecode } from "jwt-decode";
 import * as SecureStore from "expo-secure-store";
 import { ApolloClient } from "@apollo/client";
 
+import SecureStoreKeys from "../constants/SecureStoreKeys";
+
 import LOGIN_MUTATION from "@/src/gql/mutations/loginJwt";
 
 export const isTokenExpired = (token: string): boolean => {
@@ -33,7 +35,7 @@ export const refreshAccessToken = async (client: ApolloClient<any>) => {
   }
 
   const { accessToken } = data.Auth.loginJwt.loginResult.jwtTokens;
-  await SecureStore.setItemAsync("accessToken", accessToken);
+  await SecureStore.setItemAsync(SecureStoreKeys.accessToken, accessToken);
 
   return accessToken;
 };

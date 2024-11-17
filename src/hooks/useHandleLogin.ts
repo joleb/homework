@@ -35,7 +35,12 @@ export const useHandleLogin = () => {
         },
       });
 
-      if (!data || !data.Auth?.loginJwt || !loginData) {
+      if (
+        !data ||
+        !data.Auth?.loginJwt ||
+        !loginData ||
+        !loginData.Auth?.login
+      ) {
         throw new Error("Login failed");
       }
 
@@ -49,6 +54,10 @@ export const useHandleLogin = () => {
       await SecureStore.setItemAsync(SecureStoreKeys.password, password);
       // Save the access token
       await SecureStore.setItemAsync(SecureStoreKeys.accessToken, accessToken);
+      await SecureStore.setItemAsync(
+        SecureStoreKeys.userName,
+        loginData.Auth.login?.accounts[0].name,
+      );
       hasError.current = false;
       return loginData.Auth.login?.accounts[0]?.name;
     } catch (err) {

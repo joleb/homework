@@ -24,10 +24,10 @@ exports[`PressableOpacity matches snapshot 1`] = `
   focusable={true}
   hitSlop={
     {
-      "bottom": 5,
-      "left": 5,
-      "right": 5,
-      "top": 5,
+      "bottom": 8,
+      "left": 8,
+      "right": 8,
+      "top": 8,
     }
   }
   onBlur={[Function]}

@@ -9,6 +9,8 @@ import PressableOpacity from "@/src/fragments/PressableOpacity";
 import useHandleLogout from "@/src/hooks/useHandleLogout";
 import { useThemeColor } from "@/src/hooks/useThemeColor";
 
+const ICON_SIZE = 18;
+
 const LogoutHeaderButton: React.FC = () => {
   const { handleLogout } = useHandleLogout();
   const iconColor = useThemeColor({}, "text");
@@ -17,6 +19,7 @@ const LogoutHeaderButton: React.FC = () => {
   const { t } = useTranslation(["general", "errorMessages", "prompt"]);
 
   const logout = useCallback(async () => {
+    console.log("logout");
     Alert.alert(t("prompt:hint"), t("prompt:logout"), [
       {
         text: t("prompt:cancel"),
@@ -51,10 +54,10 @@ const LogoutHeaderButton: React.FC = () => {
 
   const renderIcon = useCallback(() => {
     if (isLoggingOut) {
-      return <Feather name="loader" size={18} color={iconColor} />;
+      return <Feather name="loader" size={ICON_SIZE} color={iconColor} />;
     }
-    return <Feather name="log-out" size={18} color={iconColor} />;
-  }, [isLoggingOut, iconColor]);
+    return <Feather name="log-out" size={ICON_SIZE} color={iconColor} />;
+  }, [isLoggingOut, iconColor, logout]);
 
   return (
     <PressableOpacity

@@ -24,6 +24,7 @@ const useHandleLogout = () => {
       await SecureStore.deleteItemAsync(SecureStoreKeys.accessToken);
       await SecureStore.deleteItemAsync(SecureStoreKeys.email);
       await SecureStore.deleteItemAsync(SecureStoreKeys.password);
+      await SecureStore.deleteItemAsync(SecureStoreKeys.userName);
       return true;
     } catch (err) {
       console.error("Logout error:", err);

@@ -17,7 +17,7 @@ import { ContentNodeEdge } from "@/src/types";
 import Spacing from "@/src/constants/Spacing";
 import { ThemedText } from "@/src/fragments/ThemedText";
 import LogoutHeaderButton from "@/src/components/LogoutHeaderButton";
-import { useAuth } from "@/src/components/contexts/AuthContext";
+import { useAuth } from "@/src/components/provider/AuthProvider";
 import Spacer from "@/src/fragments/Spacer";
 import { useThemeColor } from "@/src/hooks/useThemeColor";
 import { updateQuery } from "@/src/utils/dashboard";

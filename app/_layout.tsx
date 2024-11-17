@@ -9,18 +9,17 @@ import * as SplashScreen from "expo-splash-screen";
 import { useTranslation } from "react-i18next";
 import { useFonts } from "expo-font";
 
-import apolloClient from "../src/utils/apolloClient";
-
+import apolloClient from "@/src/utils/apolloClient";
 import {
   darkNavigationTheme,
   lightNavigationTheme,
 } from "@/src/constants/NavigationTheme";
-import { AuthProvider, useAuth } from "@/src/components/contexts/AuthContext";
+import { AuthProvider, useAuth } from "@/src/components/provider/AuthProvider";
 
 import "@/src/utils/i18n";
 import "react-native-reanimated";
 
-import useColorScheme from "../src/hooks/useColorScheme";
+import useColorScheme from "@/src/hooks/useColorScheme";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -30,7 +29,6 @@ const RootLayout = () => {
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
-  const { t } = useTranslation(["routes", "actions"]);
 
   useEffect(() => {
     if (loaded) {
@@ -62,9 +60,8 @@ const RootLayout = () => {
 };
 
 const AppNavigator = () => {
-  const { t } = useTranslation(["routes", "actions"]);
+  const { t } = useTranslation(["routes"]);
   const { isLoggedIn } = useAuth();
-
   return (
     <Stack>
       <Stack.Screen

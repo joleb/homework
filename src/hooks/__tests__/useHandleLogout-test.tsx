@@ -2,16 +2,14 @@ import { renderHook, act } from "@testing-library/react-native";
 import { useMutation } from "@apollo/client";
 import * as SecureStore from "expo-secure-store";
 
-import useHandleLogout from "../useHandleLogout"; // Adjust the import path
+import useHandleLogout from "../useHandleLogout";
 
-import LOGOUT_MUTATION from "@/src/gql/mutations/logout"; // Adjust the import path
+import LOGOUT_MUTATION from "@/src/gql/mutations/logout";
 
-// Mock Apollo Client's useMutation
 jest.mock("@apollo/client", () => ({
   useMutation: jest.fn(),
 }));
 
-// Mock SecureStore from expo-secure-store
 jest.mock("expo-secure-store", () => ({
   deleteItemAsync: jest.fn(),
 }));
@@ -33,7 +31,6 @@ describe("useHandleLogout", () => {
   });
 
   it("should handle logout successfully and delete credentials from SecureStore", async () => {
-    // Mock a successful logout mutation
     mockLogout.mockResolvedValue({ data: {} });
 
     const { result } = renderHook(() => useHandleLogout());
@@ -51,7 +48,6 @@ describe("useHandleLogout", () => {
   });
 
   it("should handle logout failure and return false", async () => {
-    // Mock a failed logout mutation
     mockLogout.mockRejectedValue(new Error("Logout failed"));
 
     const { result } = renderHook(() => useHandleLogout());
